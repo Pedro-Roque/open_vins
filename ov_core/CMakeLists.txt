@@ -4,10 +4,19 @@ project(ov_core)
 # Include libraries (if we don't have opencv 4, then fallback to opencv 3)
 # The OpenCV version needs to match the one used by cv_bridge otherwise you will get a segmentation fault!
 find_package(Eigen3 REQUIRED)
-find_package(OpenCV 3 QUIET)
-if (NOT OpenCV_FOUND)
-    find_package(OpenCV 4 REQUIRED)
-endif ()
+# find_package(OpenCV 3 QUIET)
+# if (NOT OpenCV_FOUND)
+#     find_package(OpenCV 4 REQUIRED)
+# endif ()
+find_package(OpenCV 4.5.0 EXACT REQUIRED
+  PATHS /home/roque/Gits/opencv/build
+  NO_DEFAULT_PATH
+)
+# find_package(OpenCV 4 REQUIRED
+#    NO_MODULE #Should be optional, tells CMake to use config mode
+#    PATHS /home/roque/.local # Tells CMake to look here
+#    NO_DEFAULT_PATH #and don't look anywhere else
+# )
 find_package(Boost REQUIRED COMPONENTS system filesystem thread date_time)
 message(STATUS "OPENCV: " ${OpenCV_VERSION} " | BOOST: " ${Boost_VERSION})
 

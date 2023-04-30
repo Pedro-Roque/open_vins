@@ -26,6 +26,7 @@
 #include "feat/FeatureInitializer.h"
 #include "track/TrackAruco.h"
 #include "track/TrackDescriptor.h"
+#include "track/TrackSIFT.h"
 #include "track/TrackKLT.h"
 #include "track/TrackSIM.h"
 #include "types/Landmark.h"

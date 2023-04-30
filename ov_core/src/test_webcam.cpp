@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
 #endif
 
   // Verbosity
-  std::string verbosity = "INFO";
+  std::string verbosity = "DEBUG";
   parser->parse_config("verbosity", verbosity);
   ov_core::Printer::setPrintLevel(verbosity);
 
@@ -142,9 +142,10 @@ int main(int argc, char **argv) {
   }
 
   // Lets make a feature extractor
-  extractor = new TrackKLT(cameras, num_pts, num_aruco, !use_stereo, method, fast_threshold, grid_x, grid_y, min_px_dist);
-  // extractor = new TrackDescriptor(cameras, num_pts, num_aruco, !use_stereo, method, fast_threshold, grid_x, grid_y, min_px_dist,
-  // knn_ratio); extractor = new TrackAruco(cameras, num_aruco, !use_stereo, method, do_downsizing);
+  //extractor = new TrackKLT(cameras, num_pts, num_aruco, !use_stereo, method, fast_threshold, grid_x, grid_y, min_px_dist);
+  extractor = new TrackDescriptor(cameras, num_pts, num_aruco, !use_stereo, method, fast_threshold, grid_x, grid_y, min_px_dist,
+  knn_ratio); 
+  //extractor = new TrackAruco(cameras, num_aruco, !use_stereo, method, do_downsizing);
 
   //===================================================================================
   //===================================================================================
@@ -152,7 +153,7 @@ int main(int argc, char **argv) {
 
   // Open the first webcam (0=laptop cam, 1=usb device)
   cv::VideoCapture cap;
-  if (!cap.open(0)) {
+  if (!cap.open(4)) {
     PRINT_ERROR(RED "Unable to open a webcam feed!\n" RESET);
     return EXIT_FAILURE;
   }
@@ -222,22 +223,22 @@ int main(int argc, char **argv) {
     }
 
     // Push back the current time, as a clone time
-    clonetimes.push_back(current_time);
+    // clonetimes.push_back(current_time);
 
-    // Marginalized features if we have reached 5 frame tracks
-    if ((int)clonetimes.size() >= clone_states) {
-      // Remove features that have reached their max track length
-      double margtime = clonetimes.at(0);
-      clonetimes.pop_front();
-      std::vector<std::shared_ptr<Feature>> feats_marg = database->features_containing(margtime);
-      // Delete theses feature pointers
-      for (size_t i = 0; i < feats_marg.size(); i++) {
-        feats_marg[i]->to_delete = true;
-      }
-    }
+    // // Marginalized features if we have reached 5 frame tracks
+    // if ((int)clonetimes.size() >= clone_states) {
+    //   // Remove features that have reached their max track length
+    //   double margtime = clonetimes.at(0);
+    //   clonetimes.pop_front();
+    //   std::vector<std::shared_ptr<Feature>> feats_marg = database->features_containing(margtime);
+    //   // Delete theses feature pointers
+    //   for (size_t i = 0; i < feats_marg.size(); i++) {
+    //     feats_marg[i]->to_delete = true;
+    //   }
+    // }
 
-    // Tell the feature database to delete old features
-    database->cleanup();
+    // // Tell the feature database to delete old features
+    // database->cleanup();
   }
 
   // Done!

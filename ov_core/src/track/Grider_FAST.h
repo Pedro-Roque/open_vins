@@ -116,10 +116,12 @@ public:
 
                       // Extract FAST features for this part of the image
                       std::vector<cv::KeyPoint> pts_new;
-                      cv::FAST(img(img_roi), pts_new, threshold, nonmaxSuppression);
+                      // cv::FAST(img(img_roi), pts_new, threshold, nonmaxSuppression);
+                      cv::Ptr<cv::SIFT> sift_extractor = cv::SIFT::create();
+                      sift_extractor->detect(img(img_roi), pts_new);
 
                       // Now lets get the top number from this
-                      std::sort(pts_new.begin(), pts_new.end(), Grider_FAST::compare_response);
+                      // std::sort(pts_new.begin(), pts_new.end(), Grider_FAST::compare_response);
 
                       // Append the "best" ones to our vector
                       // Note that we need to "correct" the point u,v since we extracted it in a ROI
